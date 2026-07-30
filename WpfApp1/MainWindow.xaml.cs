@@ -27,4 +27,5 @@ namespace WpfApp1
             DataContext = new MainViewModel();
         }
     }
+
 }
