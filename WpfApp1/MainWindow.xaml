@@ -25,7 +25,7 @@
                 <DataGridTextColumn Header="商品名" Binding="{Binding Name}" Width="*"/>
                 <DataGridTextColumn Header="価格" Binding="{Binding Price}" Width="*"/>
                 <DataGridTextColumn Header="相場" Binding="{Binding MarketPrice}" Width="*"/>
-                <DataGridTextColumn Header="差額" Binding="{Binding Difference}" Width="*"/>
+                <DataGridTextColumn Header="差額" Binding="{Binding OverPayment}" Width="*"/>
                 <DataGridTextColumn Header="判定" Binding="{Binding Judgement}" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
