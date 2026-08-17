@@ -11,6 +11,8 @@ namespace WpfApp1.Models
         public string Name { get; set; }
         public int Price { get; set; }
         public int MarketPrice { get; set; }
+        public double Gram { get; set; }
+        public Material MaterialType { get; set; }
 
         public int OverPayment => Price - MarketPrice;    //相場より多く払う金額
         public string Judgement
