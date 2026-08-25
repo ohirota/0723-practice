@@ -13,9 +13,11 @@ namespace WpfApp1.ViewModels
     {
         private List<Item> _allLines = new List<Item>()
         {
-            new Item{ Name = "アクセA", Price = 1000,  MarketPrice = 900,   Gram = 1.23, MaterialType = Material.K18 },
-            new Item{ Name = "アクセB", Price = 33500, MarketPrice = 37500, Gram = 4.5,  MaterialType = Material.Pt850 },
-            new Item{ Name = "アクセC", Price = 10000, MarketPrice = 90000, Gram = 6.7,  MaterialType = Material.K18 },
+            new Item{ Name = "アクセA", Price = 1000,   Gram = 1.23, MaterialType = Material.K18 },
+            new Item{ Name = "アクセB", Price = 33500, Gram = 4.5,  MaterialType = Material.Pt850 },
+            new Item{ Name = "アクセC", Price = 10000,  Gram = 6.7,  MaterialType = Material.K18 },
+            new Item{ Name = "アクセD", Price = 198000,  Gram = 7.8,  MaterialType = Material.K24 },
+            new Item{ Name = "アクセE", Price = 10000,   Gram = 1.2,  MaterialType = Material.Pt900 },
         };
 
         public ObservableCollection<Item> FilteredLines { get; set; }
@@ -52,31 +54,47 @@ namespace WpfApp1.ViewModels
             doc.LoadHtml(html);
 
             // ① 探す
+            var Gold1000 = doc.DocumentNode.SelectSingleNode("//th[contains(text(), 'K24 (純度 100％)')]/following-sibling::td");
             var Gold750 = doc.DocumentNode.SelectSingleNode("//th[contains(text(), 'K18 (純度 75％)')]/following-sibling::td");
+            var Pla900 = doc.DocumentNode.SelectSingleNode("//th[contains(text(), 'Pt 900 (純度 90％)')]/following-sibling::td");
             var Pla850 = doc.DocumentNode.SelectSingleNode("//th[contains(text(), 'Pt 850 (純度 85％)')]/following-sibling::td");
 
             // ② 文字列にする（メソッドに任せる）
-            string priceGold = CaseNullHandling(Gold750);
-            string pricePla = CaseNullHandling(Pla850);
+            string priceGold1000 = CaseNullHandling(Gold1000);
+            string priceGold750 = CaseNullHandling(Gold750);
+            string pricePla900 = CaseNullHandling(Pla900);
+            string pricePla850 = CaseNullHandling(Pla850);
 
             // ③ 画面に渡す
-            Market.GoldPrice = priceGold;
-            Market.PlaPrice = pricePla;
+            Market.K24Price = priceGold1000;
+            Market.K18Price = priceGold750;
+            Market.Pt900Price = pricePla900;
+            Market.Pt850Price = pricePla850;
 
             // ④ 相場を数値にして、各商品の相場額を計算する
-            int goldPerGram = ParsePrice(priceGold);
-            int plaPerGram = ParsePrice(pricePla);
-
+            int k24PerGram = ParsePrice(priceGold1000);
+            int k18PerGram = ParsePrice(priceGold750);
+            int pt900PerGram = ParsePrice(pricePla900);
+            int pt850PerGram = ParsePrice(pricePla850);
             foreach (Item item in FilteredLines)
             {
                 int perGram;
-                if (item.MaterialType == Material.K18)
+
+                if (item.MaterialType == Material.K24)
                 {
-                    perGram = goldPerGram;
+                    perGram = k24PerGram;
+                }
+                else if (item.MaterialType == Material.K18)
+                {
+                    perGram = k18PerGram;
+                }
+                else if (item.MaterialType == Material.Pt900)
+                {
+                    perGram = pt900PerGram;
                 }
                 else
                 {
-                    perGram = plaPerGram;
+                    perGram = pt850PerGram;
                 }
 
                 // 1グラム単価 × 重さ（小数は切り捨て）

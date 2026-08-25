@@ -8,7 +8,9 @@ namespace WpfApp1.Models
 {
     public enum Material
     {
+        K24,
         K18,
+        Pt900,
         Pt850
     }
 }
