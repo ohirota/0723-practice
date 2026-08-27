@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using HtmlAgilityPack;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,20 +22,27 @@ namespace WpfApp1.ViewModels
         };
 
         public ObservableCollection<Item> FilteredLines { get; set; }
+        public IAsyncRelayCommand RefreshCommand { get; }
         public MarketPrice Market { get; set; } = new MarketPrice();
 
         public MainViewModel()
         {
             FilteredLines = new ObservableCollection<Item>(_allLines);
-            _ = LoadMarketDataAsync();   // ここで呼び出す
+            RefreshCommand = new AsyncRelayCommand(RefreshMarketDataAsync);
+            _ = LoadMarketDataAsync(false);   // ここで呼び出す
         }
 
-        private async Task LoadMarketDataAsync()
+        private async Task RefreshMarketDataAsync()
+        {
+            await LoadMarketDataAsync(true);
+        }
+
+        private async Task LoadMarketDataAsync(bool forceRefresh)
         {
             string filePath = "nexus_cache.html";
             string html;
 
-            if (System.IO.File.Exists(filePath))
+            if (forceRefresh == false && System.IO.File.Exists(filePath))
             {
                 // ファイルがあれば、そこから読み込む（外部アクセスしない）
                 html = System.IO.File.ReadAllText(filePath);

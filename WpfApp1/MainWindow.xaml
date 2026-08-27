@@ -17,6 +17,7 @@
             <TextBlock Text="{Binding Market.K18Price, StringFormat='K18相場: {0}'}" Margin="0,0,20,0"/>
             <TextBlock Text="{Binding Market.Pt900Price, StringFormat='Pt900相場: {0}'}" Margin="0,0,20,0"/>
             <TextBlock Text="{Binding Market.Pt850Price, StringFormat='Pt850相場: {0}'}"/>
+            <Button Content="相場を更新" Command="{Binding RefreshCommand}" Margin="20,0,0,0"/>
         </StackPanel>
         
         <DataGrid Grid.Row="1" ItemsSource="{Binding FilteredLines}"
