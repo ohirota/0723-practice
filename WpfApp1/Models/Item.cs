@@ -1,16 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace WpfApp1.Models
 {
-    public class Item
+    public class Item : ObservableObject
     {
         public string Name { get; set; }
         public int Price { get; set; }
-        public int MarketPrice { get; set; }
+        private int _marketPrice;
+        public int MarketPrice
+        {
+            get => _marketPrice;
+            set
+            {
+                if (SetProperty(ref _marketPrice, value))
+                {
+                    OnPropertyChanged(nameof(OverPayment));
+                    OnPropertyChanged(nameof(Judgement));
+                }
+            }
+        }
+
         public double Gram { get; set; }
         public Material MaterialType { get; set; }
 
